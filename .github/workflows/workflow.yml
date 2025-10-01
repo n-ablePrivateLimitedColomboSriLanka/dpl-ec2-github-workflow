@@ -43,8 +43,9 @@ jobs:
       labels: 242
     steps:
       - name: Stop current container (ignore if not running)
-        run: docker stop ${{ needs.Build.outputs.app }} || true
-
+        run: docker stop ${{ needs.Build.outputs.app }}
+      - name: prune container
+        run: docker container prune -f
       - name: Start application
         run: docker run -d --rm --name ${{ needs.Build.outputs.app }} -p 3000:3000 ${{ needs.Build.outputs.app }}
 

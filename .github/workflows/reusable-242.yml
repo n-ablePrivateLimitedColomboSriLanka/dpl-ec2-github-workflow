@@ -6,6 +6,12 @@ on:
       repo:
         required: true
         type: string
+      host-port:
+        required: true
+        type: string
+      container-port:
+        required: true
+        type: string
 
 jobs:
   Build:
@@ -42,16 +48,22 @@ jobs:
       group: ibm-vm-242
       labels: 242
     steps:
+      - name: list images
+        run: docker images
+      - name: Stop list running containers
+        run: docker ps
       - name: Stop current container (ignore if not running)
-        run: docker stop ${{ needs.Build.outputs.app }}
+        run: docker stop ${{ needs.Build.outputs.app }} || true
       - name: prune container
         run: docker container prune -f
       - name: Start application
-        run: docker run -d --rm --name ${{ needs.Build.outputs.app }} -p 3000:3000 ${{ needs.Build.outputs.app }}
+        run: docker run -d --rm --name ${{ needs.Build.outputs.app }} -p ${{ inputs.host-port }}:${{ inputs.container-port }} ${{ needs.Build.outputs.app }}
 
   Cleanup:
     needs: Deploy
-    runs-on: self-hosted
+    runs-on:
+      group: ibm-vm-242
+      labels: 242
     steps:
       - name: Prune unused docker resources
         run: docker system prune -f

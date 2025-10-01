@@ -55,7 +55,6 @@ jobs:
 
   Cleanup:
     needs: Deploy
-    needs: Build
     runs-on:
       group: ibm-vm-135
       labels: 135

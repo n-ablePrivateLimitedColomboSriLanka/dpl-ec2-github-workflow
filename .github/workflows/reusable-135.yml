@@ -6,6 +6,12 @@ on:
       repo:
         required: true
         type: string
+      host-port:
+        required: true
+        type: string
+      container-port:
+        required: true
+        type: string
 
 jobs:
   Build:

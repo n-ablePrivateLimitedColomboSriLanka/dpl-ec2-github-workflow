@@ -51,7 +51,7 @@ jobs:
       - name: prune container
         run: docker container prune -f
       - name: Start application
-        run: docker run -d --rm --name ${{ needs.Build.outputs.app }} -p 9081:3000:3000 ${{ needs.Build.outputs.app }}
+        run: docker run -d --rm --name ${{ needs.Build.outputs.app }} -p 9081:3000 ${{ needs.Build.outputs.app }}
 
   Cleanup:
     needs: Deploy

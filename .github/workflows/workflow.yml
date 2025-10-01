@@ -39,8 +39,8 @@ jobs:
   Deploy:
     needs: Build
     runs-on:
-      group: ibm-vm-242
-      labels: 242
+      group: ibm-vm-135
+      labels: 135
     steps:
       - name: list images
         run: docker images
@@ -55,7 +55,10 @@ jobs:
 
   Cleanup:
     needs: Deploy
-    runs-on: self-hosted
+    needs: Build
+    runs-on:
+      group: ibm-vm-135
+      labels: 135
     steps:
       - name: Prune unused docker resources
         run: docker system prune -f

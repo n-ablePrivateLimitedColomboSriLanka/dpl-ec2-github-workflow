@@ -39,11 +39,15 @@ jobs:
   Deploy:
     needs: Build
     runs-on:
-      group: ibm-vm-242
-      labels: 242
+      group: ibm-vm-135
+      labels: 135
     steps:
+      - name: list images
+        run: docker images
+      - name: Stop list running containers
+        run: docker ps
       - name: Stop current container (ignore if not running)
-        run: docker stop ${{ needs.Build.outputs.app }}
+        run: docker stop ${{ needs.Build.outputs.app }} || true
       - name: prune container
         run: docker container prune -f
       - name: Start application
@@ -51,7 +55,9 @@ jobs:
 
   Cleanup:
     needs: Deploy
-    runs-on: self-hosted
+    runs-on:
+      group: ibm-vm-135
+      labels: 135
     steps:
       - name: Prune unused docker resources
         run: docker system prune -f

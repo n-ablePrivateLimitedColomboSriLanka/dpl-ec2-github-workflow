@@ -10,8 +10,8 @@ on:
 jobs:
   Build:
     runs-on:
-      group: ibm-vm-242
-      labels: 242
+      group: ibm-vm-135
+      labels: 135
     outputs:
       app: ${{ steps.get-app.outputs.app }}
     steps:

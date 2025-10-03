@@ -53,7 +53,7 @@ jobs:
       - name: List running containers
         run: docker ps
       - name: Stop current container
-        run: docker stop ${{ needs.Build.outputs.app }}
+        run: docker stop ${{ needs.Build.outputs.app }} || true
       - name: prune container
         run: docker container prune -f
       - name: Start application

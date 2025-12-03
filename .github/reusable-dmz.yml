@@ -41,7 +41,7 @@ jobs:
       - name: prune container
         run: docker container prune -f
       - name: Start application
-        run: docker compose up -d
+        run: docker compose up -d || true
   Cleanup:
     needs: Deploy
     runs-on:

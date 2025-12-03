@@ -1,0 +1,52 @@
+name: Reusable Workflow
+
+on:
+  workflow_call:
+    inputs:
+      branch-name:
+        required: true
+        type: string
+
+jobs:
+  Build:
+    runs-on:
+      group: dmz
+      labels: dmz
+    outputs:
+      app: ${{ steps.get-app.outputs.app }}
+    steps:
+      - name: Check out repository code 
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.branch-name }}
+
+      - name: List files
+        run: ls -a
+
+      - name: Build Docker image
+        run: docker compose build
+
+  Deploy:
+    needs: Build
+    runs-on:
+      group: dmz
+      labels: dmz
+    steps:
+      - name: list images
+        run: docker images
+      - name: List running containers
+        run: docker ps
+      - name: Stop current container
+        run: docker compose down || true
+      - name: prune container
+        run: docker container prune -f
+      - name: Start application
+        run: docker compose up -d
+  Cleanup:
+    needs: Deploy
+    runs-on:
+      group: dmz
+      labels: dmz
+    steps:
+      - name: Prune unused docker resources
+        run: docker system prune -f
